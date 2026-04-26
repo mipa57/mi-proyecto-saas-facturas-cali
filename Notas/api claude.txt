@@ -1,0 +1,15 @@
+=== API - LECCIÓN 1 - MODELOS CLAUDE ===
+
+OPUS ? máxima inteligencia, más costo
+SONNET ? balance ideal, mejor para empezar
+HAIKU ? máxima velocidad, sin razonamiento
+
+REGLA:
+Por defecto usar Sonnet
+Tareas simples/rápidas ? Haiku
+Tareas muy complejas ? Opus
+
+EN MI SAAS:
+Haiku ? chatbot básico con clientes
+Sonnet ? extracción de datos facturas
+Opus ? validaciones DIAN complejas

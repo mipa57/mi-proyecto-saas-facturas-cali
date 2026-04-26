@@ -188,6 +188,96 @@ TIPS:
 REGLA DE ORO:
 Compacto y específico > largo y general
 
+=== CLAUDE CODE - LECCIÓN 9 - SUBAGENTES ===
+
+QUÉ SON:
+Agentes paralelos con contexto propio
+? Hacen el trabajo pesado
+? Devuelven solo el resumen
+? Contexto principal queda limpio
+
+CÓMO CREAR:
+/agents ? "Create new agent"
+? Define propósito y herramientas
+
+PERSONALIZACIÓN:
+- Memoria persistente
+- Skills precargados
+- Herramientas específicas
+
+MIS SUBAGENTES PARA EL SAAS:
+1. Explorador de Facturas (solo lectura)
+2. Revisor de Código (antes de commits)
+3. Investigador DIAN (búsqueda web)
+
+CURSO DEDICADO:
+anthropic.skilljar.com/introduction-to-subagents
+
+=== CLAUDE CODE - LECCIÓN 10 - MCP ===
+
+QUÉ ES:
+Estándar que conecta Claude con 
+herramientas y datos externos
+
+COMANDOS:
+claude mcp add ? agregar servidor
+/mcp ? ver y gestionar servidores
+
+TIPOS:
+HTTP ? servicios remotos
+Stdio ? procesos locales
+
+SCOPE:
+Local ? solo proyecto actual
+User ? todos mis proyectos
+Project ? .mcp.json compartido con equipo
+
+PARA MI SAAS:
+? MySQL (base de datos)
+? GitHub (repositorio)
+? Google Drive (facturas)
+
+CUIDADO:
+Cada MCP consume contexto
+? Desactivar los que no uses
+? Preferir CLI cuando sea posible
+? Skills son más eficientes que MCP
+
+
+=== CLAUDE CODE - LECCIÓN 11 - HOOKS ===
+
+QUÉ SON:
+Reglas deterministas que SIEMPRE se ejecutan
+Sin excepciones, sin importar el contexto
+
+EVENTOS:
+PreToolUse ? antes de actuar (puede BLOQUEAR)
+PostToolUse ? después de actuar
+UserPromptSubmit ? al enviar prompt
+Stop ? cuando Claude termina
+Notification ? cuando Claude notifica
+
+CÓDIGOS PreToolUse:
+0 ? procede
+2 ? BLOQUEADO (Claude sabe por qué)
+otro ? error visible, no bloquea
+
+PARA MI SAAS:
+? PostToolUse: formatear Python automático
+? PostToolUse: validar NIT colombiano
+? PreToolUse: bloquear rm -rf
+? Stop: notificar por WhatsApp/email
+
+CONFIGURACIÓN:
+/hooks ? dentro de Claude Code
+.claude/settings.json ? archivo directo
+? Subir a GitHub para compartir con equipo
+
+REGLA DE ORO:
+Si debe pasar SIEMPRE ? Hook
+Si es preferencia ? CLAUDE.md
+
+
 
 
 
