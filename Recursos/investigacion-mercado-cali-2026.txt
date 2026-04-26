@@ -1,0 +1,126 @@
+
+
+INVESTIGACIÓN DE MERCADO · ABRIL 2026
+Automatización de facturas para PyMEs
+en Cali, Colombia
+
+Análisis del mercado, competencia, problemas con la DIAN y oportunidades de negocio
+Cali, Valle del Cauca Facturación DIAN 2026 Oportunidades de negocio
+
+Dimensión del mercado
+Empresas en Cali (2025)
+117 K
+Registradas en la CCC · crecimiento 3,8%
+PyMEs estimadas en Cali
+~8.900
+Pequeñas + medianas (aprox. 7,7% del total)
+Mercado potencial mensual
+$1.600M
+COP · asumiendo $180K/empresa/mes
+Distribución sectorial del tejido empresarial en Cali (2025)
+Comercio al por mayor y menor
+41.759 emp.
+Industria manufacturera
+12.861 emp.
+Alojamiento y servicios de comida
+10.028 emp.
+Otros servicios
+~9.200 emp.
+Construcción y actividades inmobiliarias
+~6.500 emp.
+
+Fuente: Cámara de Comercio de Cali — Estudio Económico Anual 2025
+
+Software de facturación usado actualmente
+Principales plataformas y cuota estimada de mercado PyME Colombia
+Alegra
+Líder · ~35%
+Siigo Nube
+~28%
+Portal gratuito DIAN
+~20%
+Loggro / World Office
+~8%
+Excel + otros manuales
+~9%
+
+Estimación propia basada en fuentes de mercado. Cuotas aproximadas.
+
+¿Cuánto pagan las PyMEs por facturación electrónica?
+Rangos de precio mensual (COP) — 2026
+Portal DIAN (gratuito, sin automatización) $0
+Alegra — Plan Emprendedor (solo facturación) $17.900 / mes
+Alegra — Plan Contabilidad básico (Emprendedor) $69.900 / mes
+Alegra — Plan PyME (hasta $40M ingresos/mes) $149.900 / mes
+Siigo — Plan Profesional independiente (anual) ~$145.993 / mes
+Siigo — Plan Emprendedor (anual) ~$191.327 / mes
+Siigo — Plan Premium (hasta 5 usuarios) ~$207.869 / mes
+Soluciones enterprise / ERP integrado $450K–$800K+ / mes
+
+UVT 2026 = $52.374. Precios verificados en fuentes públicas (marzo 2026).
+
+Problemas críticos con la facturación electrónica DIAN
+Facturas enviadas sin validación previa
+
+El error más crítico y frecuente: enviar el documento al cliente antes de la aprobación DIAN. La factura no tiene validez fiscal y genera sanciones.
+Errores en NIT/cédula y datos del comprador
+
+Genera rechazo automático. La DIAN implementó autocompletado por cédula, pero el servicio no siempre funciona en tiempo real, obligando captura manual.
+Cálculo incorrecto de IVA y valores totales
+
+Las inconsistencias aritméticas son otra causa principal de rechazo. Requieren corrección y re-emisión, generando retrasos en cobro.
+Sistemas de facturación desintegrados de contabilidad
+
+El reto central de 2026: empresas con sistemas separados deben hacer conciliaciones manuales, lo que genera errores y consume tiempo del contador.
+Falta de contingencia ante caídas de conectividad
+
+En sectores como transporte, domicilios o comercio ambulante, una factura rechazada por falta de internet paraliza la venta. La ley permite 48h de contingencia pero pocas PyMEs tienen protocolos.
+Desconocimiento normativo y sanciones inesperadas
+
+Sanción por no expedir: 1% de las operaciones no facturadas, hasta 950 UVT (~$49,7M COP). Cierre de establecimiento de 3 a 10 días en caso de reincidencia.
+Firma digital vencida o RUT desactualizado
+
+La firma electrónica y la Responsabilidad 52 en el RUT deben estar vigentes. Muchas micro y pequeñas empresas no lo verifican hasta que el sistema bloquea la emisión.
+
+Alta severidad Media Baja
+
+Oportunidades de negocio identificadas
+1
+SaaS local: facturación + contabilidad todo en uno
+
+Existe una brecha entre los grandes jugadores nacionales (Alegra, Siigo) y las PyMEs locales de Cali que necesitan soporte presencial, precios en COP más bajos y onboarding guiado.
+Alta prioridad
+2
+Servicio de implementación y soporte DIAN para PyMEs
+
+Habilitación, pruebas, actualización del RUT, firma digital y capacitación. El mercado formal no ofrece este servicio de forma local y asequible para empresas con 1–20 empleados.
+Alta demanda
+3
+Integración POS-factura para comercio y gastronomía
+
+Con 41.759 empresas en comercio y 10.028 en gastronomía, el segmento POS con factura electrónica integrada y soporte offline es el nicho más desatendido en Cali.
+Gran volumen
+4
+Factoring electrónico vía RADIAN
+
+PyMEs que facturan a clientes corporativos (60–90 días de pago) pueden monetizar su cartera vía RADIAN. Hay oportunidad como bróker o plataforma de factoring para la región.
+Fintech
+5
+Automatización con IA para validación y corrección
+
+El 80% de rechazos DIAN vienen de errores humanos simples (fecha, NIT, IVA). Una capa de validación automática pre-envío y corrección asistida tiene alta propuesta de valor.
+Diferenciador
+6
+Plan de contabilidad básica para microempresas informales
+
+De las 117K empresas en Cali, la mayoría son micronegocios con baja formalización. Un plan freemium o de bajo costo ($20–35K COP/mes) con onboarding simple puede capturar este segmento.
+Volumen masivo
+Conclusiones clave
+
+    El mercado en Cali es amplio y está en expansión — 117K empresas registradas (+3,8% anual) con crecimiento liderado por comercio y gastronomía.
+    La demanda de facturación electrónica es obligatoria y universal — en 2026 prácticamente toda empresa con IVA debe facturar electrónicamente bajo pena de sanciones hasta $49,7M COP.
+    El 20% aún usa el portal DIAN gratuito, que no automatiza, no integra contabilidad y no tiene soporte: es el segmento más propenso a migrar a soluciones de pago si reciben la propuesta correcta.
+    El principal pain point no es la tecnología sino la integración: empresas con facturación separada de contabilidad e inventario sufren reprocesos costosos.
+    La mayor oportunidad local es un servicio SaaS asequible con soporte presencial en Cali, que combine facturación + contabilidad básica + onboarding guiado, apuntando a los sectores de comercio y gastronomía donde la concentración empresarial es más alta.
+
+Fuentes: Cámara de Comercio de Cali — Estudio Económico Anual 2025 (enero 2026) · Confecámaras — Dinámica de Creación de Empresas 2024 · DIAN — Resolución 000165/2023 y 000202/2025 · programascontabilidad.com — Precios Software Colombia 2026 · Alegra Blog Colombia · Dataico · LibreGestión · LEMP Soft · Siigo.com · UVT 2026 = $52.374 

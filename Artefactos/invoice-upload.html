@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal de Facturas</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #0d1b2a;
+    --slate:  #1a2c40;
+    --gold:   #c9a84c;
+    --gold-lt:#e6c97a;
+    --smoke:  #8fa3b1;
+    --white:  #f4f1ec;
+    --danger: #d64045;
+    --success:#3a9e7e;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 20px 60px;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(201,168,76,.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 10% 90%, rgba(58,158,126,.05) 0%, transparent 60%);
+  }
+
+  /* ── Header ── */
+  header {
+    text-align: center;
+    margin-bottom: 52px;
+    animation: fadeDown .6s ease both;
+  }
+  .logo-mark {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-bottom: 20px;
+  }
+  .logo-icon {
+    width: 38px; height: 38px;
+    border: 1.5px solid var(--gold);
+    border-radius: 8px;
+    display: grid; place-items: center;
+    color: var(--gold); font-size: 18px;
+  }
+  .logo-text {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500; font-size: 15px;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--smoke);
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.15;
+    letter-spacing: -.01em;
+  }
+  h1 span { color: var(--gold); }
+  .subtitle {
+    margin-top: 12px;
+    color: var(--smoke);
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: .01em;
+  }
+
+  /* ── Card ── */
+  .card {
+    width: 100%; max-width: 600px;
+    background: var(--slate);
+    border: 1px solid rgba(201,168,76,.15);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 32px 80px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.03);
+    animation: fadeUp .7s .1s ease both;
+  }
+
+  /* ── Drop Zone ── */
+  .drop-zone {
+    border: 1.5px dashed rgba(201,168,76,.35);
+    border-radius: 14px;
+    padding: 52px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .25s, background .25s, transform .2s;
+    position: relative;
+    background: rgba(201,168,76,.03);
+  }
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--gold);
+    background: rgba(201,168,76,.07);
+    transform: translateY(-2px);
+  }
+  .drop-zone input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .dz-icon {
+    width: 58px; height: 58px;
+    margin: 0 auto 20px;
+    background: rgba(201,168,76,.1);
+    border: 1px solid rgba(201,168,76,.25);
+    border-radius: 14px;
+    display: grid; place-items: center;
+    font-size: 26px;
+    transition: transform .3s;
+  }
+  .drop-zone:hover .dz-icon { transform: scale(1.08) rotate(-4deg); }
+  .dz-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; color: var(--white);
+    margin-bottom: 6px;
+  }
+  .dz-sub {
+    font-size: 13px; color: var(--smoke); font-weight: 300;
+    line-height: 1.6;
+  }
+  .dz-badge {
+    display: inline-block; margin-top: 16px;
+    background: rgba(201,168,76,.1);
+    border: 1px solid rgba(201,168,76,.25);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--gold-lt);
+  }
+
+  /* ── File List ── */
+  .file-list {
+    margin-top: 24px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .file-item {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 10px;
+    padding: 12px 16px;
+    animation: slideIn .3s ease both;
+  }
+  .file-thumb {
+    width: 36px; height: 36px; flex-shrink: 0;
+    background: rgba(201,168,76,.12);
+    border-radius: 8px;
+    display: grid; place-items: center;
+    font-size: 16px;
+  }
+  .file-info { flex: 1; overflow: hidden; }
+  .file-name {
+    font-size: 13px; font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    color: var(--white);
+  }
+  .file-size { font-size: 11px; color: var(--smoke); margin-top: 2px; }
+  .file-remove {
+    background: none; border: none; cursor: pointer;
+    color: var(--smoke); font-size: 18px; line-height: 1;
+    padding: 4px; border-radius: 6px;
+    transition: color .2s, background .2s;
+  }
+  .file-remove:hover { color: var(--danger); background: rgba(214,64,69,.1); }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    margin-top: 24px; display: none;
+  }
+  .progress-wrap.visible { display: block; }
+  .progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--smoke); margin-bottom: 8px;
+  }
+  .progress-track {
+    height: 4px; background: rgba(255,255,255,.08); border-radius: 99px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+    border-radius: 99px;
+    transition: width .4s ease;
+  }
+
+  /* ── Actions ── */
+  .actions { margin-top: 28px; display: flex; gap: 12px; }
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    border: none; border-radius: 10px;
+    padding: 13px 24px; cursor: pointer;
+    transition: transform .18s, box-shadow .18s, opacity .18s;
+    letter-spacing: .02em;
+  }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn:not(:disabled):hover { transform: translateY(-2px); }
+  .btn-primary {
+    flex: 1;
+    background: linear-gradient(135deg, var(--gold), #a07a2e);
+    color: var(--navy);
+    box-shadow: 0 6px 24px rgba(201,168,76,.3);
+  }
+  .btn-primary:not(:disabled):hover { box-shadow: 0 10px 32px rgba(201,168,76,.45); }
+  .btn-secondary {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    color: var(--smoke);
+  }
+  .btn-secondary:not(:disabled):hover { background: rgba(255,255,255,.1); color: var(--white); }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--slate);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 12px;
+    padding: 14px 22px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: var(--white);
+    box-shadow: 0 16px 48px rgba(0,0,0,.5);
+    transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+    z-index: 999; white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.success .toast-dot { background: var(--success); }
+  .toast.error   .toast-dot { background: var(--danger); }
+  .toast-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── Info strip ── */
+  .info-strip {
+    margin-top: 28px;
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .info-pill {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12px; color: var(--smoke);
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 20px; padding: 6px 14px;
+  }
+  .info-pill span { font-size: 14px; }
+
+  /* ── Animations ── */
+  @keyframes fadeDown {
+    from { opacity:0; transform: translateY(-18px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(24px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  @keyframes slideIn {
+    from { opacity:0; transform: translateX(-10px); }
+    to   { opacity:1; transform: translateX(0); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">
+    <div class="logo-icon">◈</div>
+    <span class="logo-text">FacturasPro</span>
+  </div>
+  <h1>Carga de <span>Facturas</span></h1>
+  <p class="subtitle">Sube tus documentos PDF de forma segura y rápida</p>
+</header>
+
+<div class="card">
+
+  <!-- Drop Zone -->
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" accept=".pdf" multiple>
+    <div class="dz-icon">📄</div>
+    <p class="dz-title">Arrastra tus facturas aquí</p>
+    <p class="dz-sub">o haz clic para seleccionar archivos<br>desde tu dispositivo</p>
+    <span class="dz-badge">Solo archivos PDF</span>
+  </div>
+
+  <!-- File list -->
+  <div class="file-list" id="fileList"></div>
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label">
+      <span id="progressLabel">Subiendo archivos…</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button class="btn btn-secondary" id="clearBtn" disabled onclick="clearAll()">Limpiar</button>
+    <button class="btn btn-primary"    id="uploadBtn" disabled onclick="simulateUpload()">Subir facturas</button>
+  </div>
+
+  <!-- Info pills -->
+  <div class="info-strip">
+    <div class="info-pill"><span>🔒</span> Cifrado seguro</div>
+    <div class="info-pill"><span>📦</span> Máx. 10 MB por archivo</div>
+    <div class="info-pill"><span>⚡</span> Procesamiento inmediato</div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+  const dropZone   = document.getElementById('dropZone');
+  const fileInput  = document.getElementById('fileInput');
+  const fileList   = document.getElementById('fileList');
+  const uploadBtn  = document.getElementById('uploadBtn');
+  const clearBtn   = document.getElementById('clearBtn');
+  const progressWrap = document.getElementById('progressWrap');
+  const progressFill = document.getElementById('progressFill');
+  const progressPct  = document.getElementById('progressPct');
+  const progressLabel = document.getElementById('progressLabel');
+
+  let files = [];
+
+  // Drag events
+  ['dragenter','dragover'].forEach(e => dropZone.addEventListener(e, ev => {
+    ev.preventDefault(); dropZone.classList.add('drag-over');
+  }));
+  ['dragleave','drop'].forEach(e => dropZone.addEventListener(e, () => dropZone.classList.remove('drag-over')));
+  dropZone.addEventListener('drop', ev => {
+    ev.preventDefault();
+    addFiles([...ev.dataTransfer.files]);
+  });
+  fileInput.addEventListener('change', () => addFiles([...fileInput.files]));
+
+  function addFiles(newFiles) {
+    const valid = newFiles.filter(f => {
+      if (f.type !== 'application/pdf') { showToast('Solo se permiten archivos PDF', 'error'); return false; }
+      if (f.size > 10 * 1024 * 1024)    { showToast(`"${f.name}" supera los 10 MB`, 'error'); return false; }
+      if (files.find(x => x.name === f.name)) return false;
+      return true;
+    });
+    files = [...files, ...valid];
+    renderList();
+    fileInput.value = '';
+  }
+
+  function renderList() {
+    fileList.innerHTML = '';
+    files.forEach((f, i) => {
+      const item = document.createElement('div');
+      item.className = 'file-item';
+      item.style.animationDelay = i * 60 + 'ms';
+      item.innerHTML = `
+        <div class="file-thumb">📄</div>
+        <div class="file-info">
+          <div class="file-name">${f.name}</div>
+          <div class="file-size">${formatSize(f.size)}</div>
+        </div>
+        <button class="file-remove" onclick="removeFile(${i})" title="Eliminar">×</button>
+      `;
+      fileList.appendChild(item);
+    });
+    const hasFiles = files.length > 0;
+    uploadBtn.disabled = !hasFiles;
+    clearBtn.disabled  = !hasFiles;
+  }
+
+  function removeFile(i) {
+    files.splice(i, 1);
+    renderList();
+  }
+
+  function clearAll() {
+    files = [];
+    renderList();
+    progressWrap.classList.remove('visible');
+    progressFill.style.width = '0%';
+  }
+
+  function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  }
+
+  function simulateUpload() {
+    if (!files.length) return;
+    uploadBtn.disabled = true;
+    clearBtn.disabled  = true;
+    progressWrap.classList.add('visible');
+    progressLabel.textContent = `Subiendo ${files.length} archivo${files.length > 1 ? 's' : ''}…`;
+
+    let pct = 0;
+    const interval = setInterval(() => {
+      pct += Math.random() * 12 + 4;
+      if (pct >= 100) {
+        pct = 100;
+        clearInterval(interval);
+        progressFill.style.width = '100%';
+        progressPct.textContent  = '100%';
+        progressLabel.textContent = '¡Subida completada!';
+        showToast(`${files.length} factura${files.length > 1 ? 's' : ''} subida${files.length > 1 ? 's' : ''} correctamente`, 'success');
+        setTimeout(() => { clearAll(); }, 2200);
+      } else {
+        progressFill.style.width = pct + '%';
+        progressPct.textContent  = Math.round(pct) + '%';
+      }
+    }, 180);
+  }
+
+  function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.className = `toast ${type}`;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3200);
+  }
+</script>
+</body>
+</html>
