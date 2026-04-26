@@ -1,20 +1,33 @@
 {
   "mcpServers": {
-    "mysql": {
+    "mongodb": {
       "type": "stdio",
       "command": "python",
-      "args": ["mcp_mysql.py"],
-      "description": "Base de datos de facturas"
+      "args": [
+        "-m",
+        "mcp_server_mongodb"
+      ],
+      "env": {
+        "MONGODB_URI": "mongodb+srv://admin:Ferreteria@ferreteriafeliz.d84tqyy.mongodb.net/?appName=Ferreteriafeliz_URI_DE_ATLAS_AQUI",
+        "MONGODB_DATABASE": "saas_facturas_cali"
+      },
+      "description": "MongoDB Atlas - Base de datos de facturas en la nube"
     },
-    "gdrive": {
+
+    "google-drive": {
       "type": "http",
-      "url": "https://drivemcp.googleapis.com/mcp/v1",
-      "description": "Respaldo PDFs en Google Drive"
+      "url": "https://drive.google.com/drive/home",
+      "description": "Respaldo de PDFs de facturas en Google Drive"
     },
     "gmail": {
       "type": "http",
-      "url": "https://gmailmcp.googleapis.com/mcp/v1",
-      "description": "Notificaciones a clientes"
+      "url": "https://mail.google.com/mail/u/0/#inbox",
+      "description": "Notificaciones automaticas a clientes"
+    },
+    "google-calendar": {
+      "type": "http",
+      "url": "https://calendar.google.com/calendar/u/0/r?pli=1",
+      "description": "Agendar reuniones con clientes PyMEs"
     }
   }
 }

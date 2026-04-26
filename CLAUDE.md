@@ -74,3 +74,12 @@ MiSaaS/
 - Usar pip install --break-system-packages en Windows 8.1
 - No usar Docker ni AWS (muy avanzado para el nivel actual)
 - Preferir SQLite antes que PostgreSQL para empezar
+
+## MCP Servers del Proyecto
+- mysql → base de datos local de facturas
+- gdrive → respaldo PDFs en Google Drive
+- gmail → notificaciones a clientes
+
+## Comandos MCP
+- Ver servidores: /mcp
+- Agregar servidor: claude mcp add
