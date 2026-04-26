@@ -162,5 +162,33 @@ FLUJO COMPLETO:
 Code ? Subagente revisa ? 
 /commit-push-pr ? --from-pr si hay cambios
 
+=== CLAUDE CODE - LECCIÓN 8 - CLAUDE.md ===
+
+QUÉ ES:
+Memoria permanente de Claude entre sesiones
+Se lee automáticamente al iniciar
+
+JERARQUÍA:
+- Project-level ? raíz del proyecto (equipo)
+- User-level ? configuración personal (solo tú)
+
+CONTENIDO IDEAL:
+- Stack tecnológico
+- Comandos del proyecto
+- Convenciones de código
+- Lo que ya funciona
+- Próximos pasos
+
+TIPS:
+- Empieza sin él, agrégalo cuando veas patrones
+- /init ? Claude genera uno automáticamente
+- Guarda correcciones frecuentes aquí
+- Referencia docs con @archivo
+
+REGLA DE ORO:
+Compacto y específico > largo y general
+
+
+
 
 
