@@ -30,5 +30,23 @@ PyMEs colombianas.
 - /Notas → Apuntes del curso
 - /Recursos → Investigación de mercado
 
+## Contexto del proyecto
+- PyMEs colombianas en Cali
+- Python 3.10, Windows 8.1
+- MySQL para base de datos
+
+## Convenciones de código
+- Funciones en español
+- Comentarios en español
+- Validar siempre NIT colombiano
+
+## Lo que ya funciona
+- invoice-upload.html ✅
+- Estructura de carpetas ✅
+
+## Próximos pasos
+- Módulo lectura PDF
+- Extracción de NIT y total
+- Conexión MySQL
 ## 📈 Estado
 🚧 En desarrollo - Abril 2026
