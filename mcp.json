@@ -1,0 +1,16 @@
+{
+    "servers": {
+      "mysql": {
+        "type": "stdio",
+        "description": "Base de datos de facturas"
+      },
+      "google-drive": {
+        "type": "http",
+        "description": "Respaldo de PDFs"
+      },
+      "gmail": {
+        "type": "http", 
+        "description": "Notificaciones a clientes"
+      }
+    }
+  }
