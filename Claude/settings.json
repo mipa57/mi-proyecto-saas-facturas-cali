@@ -1,0 +1,39 @@
+{
+    "hooks": {
+      "PostToolUse": [
+        {
+          "matcher": "Edit|Write|MultiEdit",
+          "command": "autopep8 --in-place --aggressive $CLAUDE_TOOL_INPUT_FILE_PATH 2>/dev/null || true",
+          "description": "Formatear codigo Python automaticamente"
+        }
+      ],
+      "PreToolUse": [
+        {
+          "matcher": "Bash",
+          "command": "echo $CLAUDE_TOOL_INPUT_COMMAND | grep -qE 'rm -rf|DROP DATABASE|deleteMany|dropCollection' && exit 2 || exit 0",
+          "description": "Bloquear comandos peligrosos para el SaaS"
+        }
+      ],
+      "Stop": [
+        {
+          "command": "echo 'Claude termino la tarea en SaaS Facturas Cali' >> $CLAUDE_PROJECT_DIR/Notas/historial-tareas.txt",
+          "description": "Registrar cuando Claude termina una tarea"
+        }
+      ]
+    },
+    "permissions": {
+      "allow": [
+        "Read(**)",
+        "Edit(Codigo/**)",
+        "Edit(Artefactos/**)",
+        "Bash(pip install *)",
+        "Bash(python *)",
+        "Bash(git *)"
+      ],
+      "deny": [
+        "Bash(rm -rf *)",
+        "Edit(.env)",
+        "Edit(*.mcp.json)"
+      ]
+    }
+  }
