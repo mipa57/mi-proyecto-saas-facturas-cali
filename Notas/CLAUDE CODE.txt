@@ -126,5 +126,41 @@ Nunca pidas código sin explorar y planificar primero
 3. "Ahora escribe el código paso a paso"
 4. "Revisa el resultado final"
 
+=== CLAUDE CODE - LECCIÓN 6 - CONTEXTO ===
+
+COMANDOS:
+/compact ? Resume, libera espacio (mismo feature)
+/clear ? Borra todo (feature nuevo)
+/context ? Ver estado actual
+
+TIPS PARA AHORRAR CONTEXTO:
+1. Prompts específicos
+2. Desactivar MCP servers no usados
+3. Usar subagentes para tareas paralelas
+4. Preferir Skills sobre MCP
+5. Revisar /context regularmente
+
+CLAUDE.md = Memoria permanente entre sesiones
+
+=== CLAUDE CODE - LECCIÓN 7 - CODE REVIEW ===
+
+SUBAGENTE REVISOR:
+? Ojos frescos sin sesgo
+? Solo lectura, no edita
+? Configuración guardada en repo
+
+/commit-push-pr:
+? Commit + push + PR en un paso
+? Notifica Slack automáticamente
+
+--from-pr:
+? claude --from-pr <número>
+? Retoma contexto exacto del PR
+? Para abordar comentarios o fixes
+
+FLUJO COMPLETO:
+Code ? Subagente revisa ? 
+/commit-push-pr ? --from-pr si hay cambios
+
 
 
