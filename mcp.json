@@ -1,16 +1,20 @@
 {
-    "servers": {
-      "mysql": {
-        "type": "stdio",
-        "description": "Base de datos de facturas"
-      },
-      "google-drive": {
-        "type": "http",
-        "description": "Respaldo de PDFs"
-      },
-      "gmail": {
-        "type": "http", 
-        "description": "Notificaciones a clientes"
-      }
+  "mcpServers": {
+    "mysql": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["mcp_mysql.py"],
+      "description": "Base de datos de facturas"
+    },
+    "gdrive": {
+      "type": "http",
+      "url": "https://drivemcp.googleapis.com/mcp/v1",
+      "description": "Respaldo PDFs en Google Drive"
+    },
+    "gmail": {
+      "type": "http",
+      "url": "https://gmailmcp.googleapis.com/mcp/v1",
+      "description": "Notificaciones a clientes"
     }
   }
+}
