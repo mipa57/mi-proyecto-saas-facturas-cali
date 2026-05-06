@@ -1,3 +1,4 @@
+MODULO 1
 === API - LECCIÓN 1 - MODELOS CLAUDE ===
 
 OPUS ? máxima inteligencia, más costo
@@ -13,3 +14,453 @@ EN MI SAAS:
 Haiku ? chatbot básico con clientes
 Sonnet ? extracción de datos facturas
 Opus ? validaciones DIAN complejas
+
+=== API - LECCIÓN 2 - CÓMO FUNCIONA ===
+
+FLUJO: Cliente ? Tu Servidor ? Anthropic API
+
+PARÁMETROS REQUERIDOS:
+- API key (secreta, nunca en cliente)
+- Modelo (opus/sonnet/haiku)
+- Messages (lista de mensajes)
+- Max_tokens (límite de seguridad)
+
+PROCESO INTERNO:
+Tokenización ? Embedding ? 
+Contextualización ? Generación
+
+STOP REASONS:
+- end_turn ? terminó bien ?
+- max_tokens ? se cortó ??
+- stop_sequence ? paró por delimitador
+
+REGLA DE ORO:
+API key NUNCA en el cliente
+SIEMPRE en tu servidor
+
+=== API - LECCIÓN 3 - PRIMERA REQUEST ===
+
+INSTALACIÓN:
+pip install anthropic python-dotenv
+
+CONFIGURACIÓN:
+1. .env con ANTHROPIC_API_KEY
+2. load_dotenv() para cargar
+3. client = Anthropic()
+4. modelo = "claude-sonnet-4-20250514"
+
+ESTRUCTURA REQUEST:
+client.messages.create(
+    model=modelo,
+    max_tokens=1000,
+    messages=[{"role": "user", "content": "..."}]
+)
+
+OBTENER TEXTO:
+mensaje.content[0].text
+
+TOKENS USADOS:
+mensaje.usage.input_tokens
+mensaje.usage.output_tokens
+
+=== API - LECCIÓN 4 - MULTI-TURNO ===
+
+PROBLEMA:
+API no guarda memoria entre requests
+
+SOLUCIÓN:
+Mantener lista messages manualmente
+Enviar historial COMPLETO en cada request
+
+FUNCIONES HELPER:
+add_user_message(messages, texto)
+add_assistant_message(messages, texto)
+chat(messages) ? devuelve texto
+
+FLUJO:
+1. add_user_message
+2. chat(messages)
+3. add_assistant_message
+4. Repetir
+
+=== API - LECCIÓN 5 - SYSTEM PROMPTS ===
+
+QUÉ ES:
+Instrucciones permanentes que definen
+CÓMO responde Claude (no qué sabe)
+
+IMPLEMENTACIÓN:
+params["system"] = "tu system prompt"
+Solo agregar si existe (if system_prompt)
+
+ESTRUCTURA IDEAL:
+- Asignar rol en primera línea
+- SIEMPRE: comportamientos deseados
+- NUNCA: comportamientos a evitar
+- Casos especiales al final
+
+PARA MI SAAS:
+- Prompt general para todos los clientes
+- Prompts específicos por sector:
+  restaurantes, ferreterías, contadores
+
+=== API - LECCIÓN 6 - TEMPERATURE ===
+
+QUÉ ES:
+Control de aleatoriedad (0-1)
+0 = determinista, siempre igual
+1 = creativo, siempre diferente
+
+IMPLEMENTACIÓN:
+params["temperature"] = 0
+
+PARA MI SAAS:
+Extracción de datos ? 0
+Soporte clientes ? 0.3
+Emails ? 0.5
+Marketing ? 0.9
+
+REGLA DE ORO:
+Datos y precisión ? Temperature 0
+
+=== API - LECCIÓN 7 - STREAMING ===
+
+QUÉ ES:
+Mostrar respuesta palabra por palabra
+en tiempo real (como ChatGPT)
+
+IMPLEMENTACIÓN:
+client.messages.stream() ? context manager
+stream.text_stream ? itera chunks de texto
+print(chunk, end="", flush=True) ? muestra
+
+GUARDAR RESPUESTA:
+texto_completo += chunk
+? Acumular para guardar en MongoDB
+
+PARA MI SAAS:
+? Chatbot de soporte con streaming
+? StreamingResponse en FastAPI
+? Mejor experiencia para clientes PyMEs
+
+REGLA:
+Siempre usar streaming en interfaces
+de usuario ? mejor experiencia
+
+MODULO2
+
+=== API - LECCIÓN 1 - CONTROL OUTPUT ===
+
+PREFILLING:
+? Agregar mensaje assistant al final
+? Claude continúa desde ese punto
+? Siempre unir: prefill + respuesta
+
+STOP SEQUENCES:
+? Claude para cuando genera ese texto
+? El texto del stop NO se incluye
+? Útil para limpiar respuestas
+
+COMBINACIÓN PERFECTA:
+Prefill "```json" + Stop "```"
+= JSON limpio sin texto extra ?
+
+PARA MI SAAS:
+? Extraer datos de facturas en JSON
+? Respuestas estructuradas siempre
+? Sin texto innecesario
+
+=== API - LECCIÓN 2 - DATOS ESTRUCTURADOS ===
+
+PROBLEMA:
+Claude responde en texto natural
+? Difícil de guardar en MongoDB
+
+SOLUCIÓN 1 (simple):
+Prefill "```json" + Stop "```"
+? JSON limpio pero menos confiable
+
+SOLUCIÓN 2 (producción):
+Tool Use con schema definido
++ tool_choice forzado
+? JSON garantizado ?
+
+PARA MI SAAS:
+extraer_datos_con_tool(texto_pdf)
+? Devuelve diccionario listo para MongoDB
+
+CAMPOS A EXTRAER:
+- nit (string)
+- total (number)
+- fecha (string YYYY-MM-DD)
+- proveedor (string)
+- items (array)
+
+MODULO 3
+
+=== API - MÓDULO 3 - LECCIÓN 1 - TOOLS ===
+
+QUÉ SON:
+Funciones Python que Claude puede pedir
+ejecutar para obtener información externa
+
+FLUJO:
+1. Enviar mensaje + lista de tools
+2. Claude pide ejecutar tool
+3. Tu código ejecuta la función
+4. Envías resultado a Claude
+5. Claude responde con información real
+
+ESTRUCTURA TOOL:
+- name: identificador
+- description: qué hace, cuándo usarlo
+- input_schema: parámetros que necesita
+
+MIS TOOLS PARA EL SAAS:
+1. get_current_datetime ? fecha/hora
+2. consultar_mongodb ? historial facturas
+3. validar_nit_dian ? verificar NIT
+
+STOP REASON:
+"tool_use" ? Claude quiere un tool
+"end_turn" ? Claude terminó ?
+
+=== API - MÓDULO 3 - LECCIÓN 2 - SCHEMAS ===
+
+ESTRUCTURA COMPLETA:
+1. Definir tool schemas (JSON)
+2. Crear funciones Python reales
+3. Crear despachador ejecutar_tool()
+4. Loop while hasta stop_reason != "tool_use"
+
+LOOP PRINCIPAL:
+while True:
+    respuesta = claude(messages + tools)
+    if stop_reason != "tool_use" ? return texto
+    ejecutar tools pedidos
+    agregar resultados al historial
+    repetir
+
+MIS TOOLS:
+- get_current_datetime ? fecha/hora
+- consultar_facturas_cliente ? MongoDB
+- validar_nit ? validación colombiana
+
+STOP REASONS:
+"tool_use" ? ejecutar tool y continuar
+"end_turn" ? respuesta final ?
+
+
+
+
+MODULO 4
+
+=== API - MÓDULO 4 - LECCIÓN 1 - RAG ===
+
+QUÉ ES:
+Buscar chunks relevantes ANTES de
+enviar a Claude para ahorrar contexto
+
+FLUJO:
+PRE-PROCESO: chunks ? embeddings ? vector store
+EN TIEMPO REAL: pregunta ? embedding ? 
+buscar similares ? Claude con contexto
+
+CHUNKING:
+- Por tamaño ? universal
+- Por sección ? mejor para facturas ?
+- Semántico ? más avanzado
+
+EMBEDDINGS:
+Voyage AI ? recomendado por Anthropic
+Texto ? lista de números ? similitud
+
+PARA MI SAAS:
+? Indexar facturas PDF por cliente
+? Buscar por NIT del cliente
+? Responder preguntas del historial
+
+=== API - MÓDULO 4 - LECCIÓN 2 - PDFs ===
+
+CÓMO ENVIAR PDF A CLAUDE:
+1. Leer archivo ? bytes
+2. Convertir a base64
+3. Enviar como bloque "document"
+   media_type: "application/pdf"
+
+CLAUDE PUEDE LEER:
+? PDFs con texto
+? PDFs escaneados (OCR)
+? PDFs con tablas
+? PDFs con imágenes
+
+PIPELINE COMPLETO:
+PDF ? base64 ? Claude + Tool ?
+JSON ? validar NIT ? MongoDB ?
+
+PARA MI SAAS:
+procesar_factura_pdf(ruta) ?
+datos estructurados listos para MongoDB
+
+COMBINACIÓN GANADORA:
+PDF + Tool Use + Temperature 0
+= Extracción perfecta siempre
+
+=== API - MÓDULO 4 - LECCIÓN 3 - CACHING ===
+
+QUÉ ES:
+Guardar trabajo de procesamiento
+para reutilizar en requests iguales
+
+ACTIVAR:
+"cache_control": {"type": "ephemeral"}
+? En system prompt
+? En tools (último tool)
+? En mensajes estáticos
+
+REGLAS:
+- Duración: 1 hora máximo
+- Mínimo: 1024 tokens
+- Máximo breakpoints: 4
+- Se invalida si cambia el contenido
+
+VERIFICAR:
+usage.cache_creation_input_tokens ? escritura
+usage.cache_read_input_tokens ? lectura ?
+
+AHORRO EN MI SAAS:
+100 clientes/día ? 90% menos costos
+$18/mes ? $1.80/mes ??
+
+=== API - MÓDULO 4 - LECCIÓN 4 - THINKING ===
+
+QUÉ ES:
+Claude piensa antes de responder
+? Mayor precisión en tareas complejas
+
+IMPLEMENTACIÓN:
+thinking={
+    "type": "enabled",
+    "budget_tokens": 5000
+}
+max_tokens > budget_tokens SIEMPRE
+
+BLOQUES DE RESPUESTA:
+- thinking ? proceso mental
+- text ? respuesta final
+- redacted_thinking ? privado/seguridad
+
+CUÁNDO USAR EN MI SAAS:
+? Análisis de sanciones DIAN
+? Detección de fraude en facturas
+? Casos legales complejos
+? Preguntas simples de soporte
+
+COSTO:
+3-5x más caro pero mucho más preciso
+Usar solo cuando sea necesario
+
+=== API - MÓDULO 4 - LECCIÓN 5 - IMÁGENES ===
+
+FORMATOS SOPORTADOS:
+JPG, JPEG, PNG, GIF, WebP
+
+IMPLEMENTACIÓN:
+{
+  "type": "image",
+  "source": {
+    "type": "base64",
+    "media_type": "image/jpeg",
+    "data": imagen_base64
+  }
+}
+
+DIFERENCIA CON PDF:
+PDF ? type: "document"
+Imagen ? type: "image"
+¡Todo lo demás igual! ?
+
+PARA MI SAAS:
+? Aceptar PDF y JPG/PNG
+? Pipeline universal detecta tipo
+? Mismo proceso de extracción
+? Mismo guardado en MongoDB
+
+PROMPTS PARA IMÁGENES:
+? Dar pasos específicos
+? Indicar qué hacer si imagen borrosa
+? Nunca inventar datos inciertos
+
+MODULO 5
+
+=== API - MÓDULO 5 - LECCION 1 -AGENTES Y WORKFLOWS ===
+
+WORKFLOWS = pasos conocidos, más confiable
+AGENTES = pasos desconocidos, más flexible
+
+TIPOS DE WORKFLOWS:
+1. Chaining ? pasos secuenciales
+2. Paralelización ? tareas simultáneas
+3. Routing ? clasificar y enrutar
+4. Evaluador ? generar, evaluar, mejorar
+
+REGLA DE ORO:
+Workflows primero ? confiabilidad
+Agentes solo cuando necesitas flexibilidad
+
+PARA MI SAAS:
+Chaining ? procesar factura
+Paralelización ? validaciones simultáneas
+Routing ? tipo de consulta del cliente
+Evaluador ? verificar extracción correcta
+
+=== API - MÓDULO 5 - LECCIÓN 2 - AGENTES ===
+
+3 PRINCIPIOS:
+1. Tools abstractas ? más flexibles
+2. Inspección del entorno ? verificar
+3. Manejo de errores ? reintentar
+
+TOOLS PARA MI AGENTE:
+- buscar_facturas(filtros) ? flexible
+- validar_nit(nit) ? verificación
+- get_datetime() ? fecha/hora
+- calcular_totales(facturas) ? matemáticas
+- generar_reporte(periodo) ? reportes
+
+LOOP DEL AGENTE:
+while True:
+    respuesta = claude(messages + tools)
+    if stop != "tool_use" ? retornar
+    ejecutar tools ? agregar resultados
+    repetir
+
+MI SAAS:
+Workflows ? procesar facturas (confiable)
+Agentes ? chatbot clientes (flexible)
+
+=== API - MÓDULO 5 - LECCIÓN 3 - COMPUTER USE ===
+
+QUÉ ES:
+Claude ve y controla el computador
+como si fuera un humano
+
+ACCIONES:
+screenshot, click, type, key, scroll
+
+FLUJO:
+Screenshot ? Analiza ? Actúa ?
+Screenshot ? Repite hasta terminar
+
+PARA MI SAAS:
+? Testing automático del portal
+? Registros en sistemas DIAN
+? Monitoreo diario automático
+? QA de nuevas funciones
+
+IMPLEMENTACIÓN:
+Tool type: "computer_20250124"
+Corre en Docker aislado
+Anthropic tiene implementación de referencia
+
+
